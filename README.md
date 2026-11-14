@@ -1,0 +1,5 @@
+Hi! Welcome to my Archipelago world repository! You may have noticed that this default branch doesn't actually have any code on it. This page just serves as an index to all of the worlds I've forked or made. Please follow one of the links below!
+
+| Game                      | Link to branch (world code)                                                                              | Branch base                                                            | Forked from?                                                                        |
+| :------------------------ | :------------------------------------------------------------------------------------------------------- | :--------------------------------------------------------------------- | :---------------------------------------------------------------------------------- |
+| UFO 50: The Big Bell Race | [**`ufo50_big_bell_race`**](https://github.com/Nixill/Archipelago/tree/ufo50_big_bell_race/worlds/ufo50) | [Here](https://github.com/Nixill/Archipelago/tree/ufo50_big_bell_race) | [UFO-50-Archipelago/Archipelago](https://github.com/UFO-50-Archipelago/Archipelago) |
