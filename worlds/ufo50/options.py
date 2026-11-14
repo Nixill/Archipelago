@@ -102,6 +102,136 @@ class CherryAllowed(OptionSet):
     default = {"Barbuta", "Night Manor"}
 
 
+# The Big Bell Race
+class BBRRaceProgression(Choice):
+    """
+    Determines how races are unlocked.
+
+    - Randomized: Each specific racetrack is an item in the multiworld.
+    - Fixed Random: The multiworld contains eight "Progressive Racetrack" items. The order they
+      unlock tracks is randomly determined for the seed.
+    - Fixed Vanilla: The multiworld contains eight "Progressive Racetrack" items. The order they
+      unlock tracks is vanilla.
+
+    Regardless of your setting, you will start with one (unless you add more in options).
+    """
+    internal_name = "bbr_race_progression"
+    display_name = "The Big Bell Race - Race Progression"
+    default = option_randomized = 0
+    option_fixed = 1
+
+class BBRRaceRandomization(Choice):
+    """
+    Determines how races are played.
+
+    - Run Random: Each time you play The Big Bell Race, the order of tracks is randomized.
+    - Seed Random: The order of tracks is randomized and predetermined at the start of the
+      multiworld. Not necessarily the same order as unlocks in Fixed Random mode.
+    - Order Received: The order of tracks is the order they are received in the multiworld.
+    """
+    internal_name = "bbr_race_randomization"
+    display_name = "The Big Bell Race - Race Randomization"
+    option_run_random = 0
+    option_seed_random = 1
+    default = option_order_received = 2
+
+class BBRRacerChecks(DefaultOnToggle):
+    """
+    If enabled, racers are items within the multiworld. Only unlocked racers can be played, and
+    race wins with each racer are checks. If disabled, there are no racer checks or items, and all
+    racers can be played at any time.
+    """
+    internal_name = "bbr_racer_checks"
+    display_name = "The Big Bell Race - Racer Checks"
+
+class BBRScoreChecks(OptionSet):
+    """
+    Determines which scores are checks. A score is checked when that score or any higher number is
+    reached (they are not restricted to exact scores only). Any number from 1 to 71 can be added.
+    """
+    internal_name = "bbr_score_checks"
+    display_name = "The Big Bell Race - Score Checks"
+    valid_keys = [str(i) for i in range(1, 72)]
+    default = frozenset(str(i) for i in range(9, 72, 9))
+
+class BBRLogicalPointsPerRace(Range):
+    """
+    Determines how many points are in logic per unlocked race. For example, a value of 5 with 5
+    races unlocked means scores up to 25 are in logic.
+
+    Once all power-ups are received, this option is treated as 9. For example, a value of 5 with 5
+    races unlocked but all power-ups received means scores up to 45 are in logic.
+    """
+    internal_name = "bbr_logical_points_per_race"
+    display_name = "The Big Bell Race - Logical Points Per Race"
+    range_start = 1
+    range_end = 9
+    default = 8
+
+class BBRSpawnLockedPowerups(Toggle):
+    """
+    If enabled, locked power-ups will still spawn as normal. The player can't pick them up, but the
+    opponent racers can. If disabled, they will not spawn.
+    """
+    internal_name = "bbr_spawn_locked_powerups"
+    display_name = "The Big Bell Race - Spawn Locked Powerups"
+
+class BBRGoldAvailability(Range):
+    """
+    Determines the number of races that must be unlocked before Gold Disk can be granted. Gold is
+    granted if a player finishes all unlocked races with enough of a lead that CPU racers couldn't
+    overcome it by winning all remaining races. More specifically, Gold Disk can be obtained after
+    5 races and a 24-point lead, 6 races with a 16-point lead, or 7 races with an 8-point lead.
+    """
+    internal_name = "bbr_gold_availability"
+    display_name = "The Big Bell Race - Gold Disk Availability"
+    range_start = 5
+    range_end = 8
+    default = 5
+
+class BBRGoldLogicRaces(Range):
+    """
+    Determines the number of races that must be unlocked before Gold Disk is in logic. See above
+    for an explanation of early Gold. The default is 7 because a player that wins every race is
+    guaranteed to have more than an 8-point lead after 7 races, which is always enough for early
+    Gold. (Note that if Gold Availability is set to a higher number than Gold Logic, the former
+    takes precedence.)
+    """
+    internal_name = "bbr_gold_logic"
+    display_name = "The Big Bell Race - Gold Disk Logic"
+    range_start = 5
+    range_end = 8
+    default = 7
+
+class BBRCherryLogicRequiresPowerups(DefaultOnToggle):
+    """
+    Cherry Disk is in logic after all eight races have been received. If this option is enabled,
+    all power-ups must also be received.
+    """
+    internal_name = "bbr_cherry_logic_requires_powerups"
+    display_name = "The Big Bell Race - Cherry Disk Requires Power-Ups"
+
+class BBRExplodeTrap(DefaultOnToggle):
+    """
+    If enabled, the player can receive traps or the player's opponents can receive items that cause
+    the player to explode and respawn suddenly.
+    """
+    internal_name = "bbr_explode_trap"
+    display_name = "The Big Bell Race - Enable Explosion Traps"
+
+class BBRDeathLink(Toggle):
+    """
+    If enabled, send deaths to other Death Link enabled games when the ship explodes (including
+    Explode Trap). When receiving deaths from other Death Link enabled games, explode the ship.
+    Only has an effect for The Big Bell Race.
+
+    This can be toggled on or off later with the terminal codes DLDS-UFOP to disable or DLEN-UFOP
+    to enable.
+    """
+    internal_name = "bbr_death_link"
+    display_name = "The Big Bell Race - Death Link"
+
+# Porgy
 class PorgyFuelDifficulty(Choice):
     """
     Determine how much fuel you need to get checks.

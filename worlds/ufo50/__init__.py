@@ -13,13 +13,14 @@ from . import options
 
 from .general_items import cartridge_items, cartridge_item_group
 
-from .games import barbuta, porgy, vainger, night_manor, party_house, divers
+from .games import barbuta, porgy, vainger, night_manor, party_house, divers, the_big_bell_race
 from .games.barbuta import items, locations, regions
 from .games.porgy import items, locations, regions
 from .games.vainger import items, locations, regions
 from .games.night_manor import items, locations, regions
 from .games.party_house import items, locations, regions
 from .games.divers import items, locations, regions
+from .games.the_big_bell_race import items, locations, regions, options
 
 
 def launch_client(*args: str):
@@ -86,6 +87,7 @@ class UFO50Web(WebWorld):
 # try to keep them in the same order as on the main menu
 ufo50_games: dict = {
     "Barbuta": barbuta,
+    "The Big Bell Race": the_big_bell_race,
     "Porgy": porgy,
     "Vainger": vainger,
     "Night Manor": night_manor,
