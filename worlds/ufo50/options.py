@@ -203,21 +203,22 @@ class BBRGoldLogicRaces(Range):
     range_end = 8
     default = 7
 
-class BBRCherryLogicRequiresPowerups(DefaultOnToggle):
+class BBRWinLogicRequiresPowerups(DefaultOnToggle):
     """
-    Cherry Disk is in logic after all eight races have been received. If this option is enabled,
-    all power-ups must also be received.
+    If this is enabled, Gift and Cherry require all power-ups to be received before they are in
+    logic. Regardless of this option, Cherry also requires all tracks to be unlocked.
     """
-    internal_name = "bbr_cherry_logic_requires_powerups"
-    display_name = "The Big Bell Race - Cherry Disk Requires Power-Ups"
+    internal_name = "bbr_win_logic_requires_powerups"
+    display_name = "The Big Bell Race - Win Logic Requires Power-Ups"
 
-class BBRExplodeTrap(DefaultOnToggle):
+class BBRTrapsEnabled(DefaultOnToggle):
     """
-    If enabled, the player can receive traps or the player's opponents can receive items that cause
-    the player to explode and respawn suddenly.
+    Whether or not random traps are enabled. Currently, the only trap is a player explosion trap
+    that explodes the player's ship after 30 seconds, causing it to respawn. Traps can be received
+    from the multiworld or picked up from random power-ups in races.
     """
-    internal_name = "bbr_explode_trap"
-    display_name = "The Big Bell Race - Enable Explosion Traps"
+    internal_name = "bbr_traps_enabled"
+    display_name = "The Big Bell Race - Enable Traps"
 
 class BBRDeathLink(Toggle):
     """
@@ -327,6 +328,18 @@ class UFO50Options(PerGameCommonOptions):
     goal_game_amount: GoalGameAmount
     cherry_allowed_games: CherryAllowed
 
+    bbr_race_progression: BBRRaceProgression
+    bbr_race_randomization: BBRRaceRandomization
+    bbr_racer_checks: BBRRacerChecks
+    bbr_score_checks: BBRScoreChecks
+    bbr_logical_points_per_race: BBRLogicalPointsPerRace
+    bbr_spawn_locked_powerups: BBRSpawnLockedPowerups
+    bbr_gold_availability: BBRGoldAvailability
+    bbr_gold_logic: BBRGoldLogicRaces
+    bbr_win_logic_requires_powerups: BBRWinLogicRequiresPowerups
+    bbr_traps_enabled: BBRTrapsEnabled
+    bbr_death_link: BBRDeathLink
+
     porgy_fuel_difficulty: PorgyFuelDifficulty
     porgy_check_on_touch: PorgyCheckOnTouch
     porgy_radar: PorgyRadar
@@ -348,6 +361,19 @@ ufo50_option_groups = [
         GoalGames,
         GoalGameAmount,
         CherryAllowed,
+    ]),
+    OptionGroup("Big Bell Race Options", [
+        BBRRaceProgression, 
+        BBRRaceRandomization, 
+        BBRRacerChecks, 
+        BBRScoreChecks, 
+        BBRLogicalPointsPerRace, 
+        BBRSpawnLockedPowerups, 
+        BBRGoldAvailability, 
+        BBRGoldLogicRaces, 
+        BBRWinLogicRequiresPowerups, 
+        BBRTrapsEnabled, 
+        BBRDeathLink, 
     ]),
     OptionGroup("Porgy Options", [
         PorgyFuelDifficulty,

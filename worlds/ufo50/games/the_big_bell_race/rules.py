@@ -1,0 +1,80 @@
+from typing import TYPE_CHECKING
+
+from BaseClasses import Region, CollectionState
+from worlds.generic.Rules import set_rule
+
+from . import racers
+
+if TYPE_CHECKING:
+    from ... import UFO50World
+
+def is_race_in_logic(race: int, state: CollectionState, world: "UFO50World") -> bool:
+    if state.has(f"The Big Bell Race - Race 0{race}", world.player):
+        return True
+    if state.count(f"The Big Bell Race - Progressive Racetrack", world.player) >= race:
+        return True
+    return False
+
+def is_racer_in_logic(racer: str, state: CollectionState, world: "UFO50World") -> bool:
+    if not world.options.bbr_racer_checks.value:
+        return True
+    if state.has(f"The Big Bell Race - {racer}", world.player):
+        return True
+    return False
+
+def powerup_count(state: CollectionState, world: "UFO50World") -> int:
+    return state.count_group_unique("The Big Bell Race - Power-Ups", world.player)
+
+def race_count(state: CollectionState, world: "UFO50World") -> int:
+    if world.options.bbr_race_progression.value == world.options.bbr_race_progression.option_randomized:
+        return state.count_group_unique("The Big Bell Race - Randomized Tracks", world.player)
+    else:
+        return state.count("The Big Bell Race - Progressive Racetrack", world.player)
+
+def max_score_in_logic(state: CollectionState, world: "UFO50World") -> int:
+    races = race_count(state, world)
+    if powerup_count(state, world) == 5:
+        score_per_race = 9
+    else:
+        score_per_race = world.options.bbr_logical_points_per_race.value
+
+    return score_per_race * races
+
+def is_win_in_logic(state: CollectionState, world: "UFO50World") -> bool:
+    if not world.options.bbr_win_logic_requires_powerups.value:
+        return True
+    if powerup_count(state, world) >= 5:
+        return True
+    return False
+
+def is_gold_in_logic(state: CollectionState, world: "UFO50World") -> bool:
+    gold_races_needed = max(
+        world.options.bbr_gold_availability.value,
+        world.options.bbr_gold_logic.value
+    )
+    return race_count(state, world) >= gold_races_needed
+
+def create_rules(world: "UFO50World", regions: dict[str, Region]) -> None:
+    for i in range(1, 9):
+        regions["Menu"].connect(regions[f"Race 0{i}"],
+                                rule=lambda state: is_race_in_logic(i, state, world))
+
+    if world.options.bbr_racer_checks.value:
+        for racer in racers:
+            set_rule(world.get_location(f"The Big Bell Race - Win with {racer}"),
+                     rule=lambda state: is_racer_in_logic(racer, state, world))
+
+    for i in range(1, 72):
+        if str(i) in world.options.bbr_score_checks:
+            set_rule(world.get_location(f"The Big Bell Race - Score {i}"),
+                     rule=lambda state: max_score_in_logic(state, world) >= i)
+
+    set_rule(world.get_location("The Big Bell Race - Garden"),
+             rule=lambda state: is_win_in_logic(state, world))
+
+    set_rule(world.get_location("The Big Bell Race - Gold"),
+             rule=lambda state: is_gold_in_logic(state, world))
+
+    if "The Big Bell Race" in world.options.cherry_allowed_games:
+        set_rule(world.get_location("The Big Bell Race - Cherry"),
+                 rule=lambda state: is_win_in_logic(state, world) and race_count(state, world) == 8)
