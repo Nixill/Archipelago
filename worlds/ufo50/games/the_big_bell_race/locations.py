@@ -82,3 +82,4 @@ def create_locations(world: "UFO50World", regions: dict[str, Region]) -> None:
         loc = Location(world.player, f"The Big Bell Race - {loc_name}", get_game_base_id("The Big Bell Race") + loc_data.id_offset,
                        regions[loc_data.region_name])
         regions[loc_data.region_name].locations.append(loc)
+    pass # for debugging

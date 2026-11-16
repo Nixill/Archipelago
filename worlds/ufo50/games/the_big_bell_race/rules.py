@@ -8,19 +8,56 @@ from . import racers
 if TYPE_CHECKING:
     from ... import UFO50World
 
-def is_race_in_logic(race: int, state: CollectionState, world: "UFO50World") -> bool:
-    if state.has(f"The Big Bell Race - Race 0{race}", world.player):
-        return True
-    if state.count(f"The Big Bell Race - Progressive Racetrack", world.player) >= race:
-        return True
-    return False
+# This was originally temporary for debugging but it became permanent.
+class RaceInLogicRule:
+    race_num: int
+    world: "UFO50World"
 
-def is_racer_in_logic(racer: str, state: CollectionState, world: "UFO50World") -> bool:
-    if not world.options.bbr_racer_checks.value:
-        return True
-    if state.has(f"The Big Bell Race - {racer}", world.player):
-        return True
-    return False
+    def __init__(self, race_num: int, world: "UFO50World"):
+        self.race_num = race_num
+        self.world = world
+
+    def __repr__(self) -> str:
+        return f"RaceInLogicRule({self.race_num}, <world>)"
+
+    def __call__(self, state: CollectionState) -> bool:
+        if state.has(f"The Big Bell Race - Race 0{self.race_num}", self.world.player):
+            return True
+        if state.count(f"The Big Bell Race - Progressive Racetrack", self.world.player) >= self.race_num:
+            return True
+        return False
+
+class RacerInLogicRule:
+    racer: str
+    world: "UFO50World"
+
+    def __init__(self, racer: str, world: "UFO50World"):
+        self.racer = racer
+        self.world = world
+
+    def __repr__(self) -> str:
+        return f"RacerInLogicRule({self.racer.__repr__()}, <world>)"
+
+    def __call__(self, state: CollectionState) -> bool:
+        if not self.world.options.bbr_racer_checks.value:
+            return True
+        if state.has(f"The Big Bell Race - {self.racer}", self.world.player):
+            return True
+        return False
+
+class ScoreInLogicRule:
+    score: int
+    world: "UFO50World"
+
+    def __init__(self, score: int, world: "UFO50World"):
+        self.score = score
+        self.world = world
+
+    def __repr__(self) -> str:
+        return f"ScoreInLogicRule({self.score}, <world>)"
+
+    def __call__(self, state: CollectionState) -> bool:
+        return max_score_in_logic(state, self.world) >= self.score
 
 def powerup_count(state: CollectionState, world: "UFO50World") -> int:
     return state.count_group_unique("The Big Bell Race - Power-Ups", world.player)
@@ -57,17 +94,18 @@ def is_gold_in_logic(state: CollectionState, world: "UFO50World") -> bool:
 def create_rules(world: "UFO50World", regions: dict[str, Region]) -> None:
     for i in range(1, 9):
         regions["Menu"].connect(regions[f"Race 0{i}"],
-                                rule=lambda state: is_race_in_logic(i, state, world))
+                                rule=RaceInLogicRule(i, world))
+                                # rule=lambda state: is_race_in_logic(i, state, world))
 
     if world.options.bbr_racer_checks.value:
         for racer in racers:
             set_rule(world.get_location(f"The Big Bell Race - Win with {racer}"),
-                     rule=lambda state: is_racer_in_logic(racer, state, world))
+                     rule=RacerInLogicRule(racer, world))
 
     for i in range(1, 72):
         if str(i) in world.options.bbr_score_checks:
             set_rule(world.get_location(f"The Big Bell Race - Score {i}"),
-                     rule=lambda state: max_score_in_logic(state, world) >= i)
+                     rule=ScoreInLogicRule(i, world))
 
     set_rule(world.get_location("The Big Bell Race - Garden"),
              rule=lambda state: is_win_in_logic(state, world))

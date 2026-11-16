@@ -20,7 +20,7 @@ from .games.vainger import items, locations, regions
 from .games.night_manor import items, locations, regions
 from .games.party_house import items, locations, regions
 from .games.divers import items, locations, regions
-from .games.the_big_bell_race import items, locations, regions, options
+from .games.the_big_bell_race import items, locations, regions
 
 
 def launch_client(*args: str):
