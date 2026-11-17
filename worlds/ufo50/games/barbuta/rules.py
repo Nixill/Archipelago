@@ -57,8 +57,9 @@ def create_rules(world: "UFO50World", regions: dict[str, Region]) -> None:
 
     regions["Above Entrance"].connect(regions["Wand Trade Room"])  # walk through the fake wall after using the door
 
-    regions["R6C7 and Nearby"].connect(regions["Mimic Room"],
-                                       rule=lambda state: has_wand(state))
+    wand_entrance = regions["R6C7 and Nearby"].connect(regions["Mimic Room"],
+                                                       rule=lambda state: has_wand(state))
+    world.multiworld.register_indirect_condition(regions["Wand Trade Room"], wand_entrance)
 
     regions["R7C7 and Nearby"].connect(regions["Wand Trade Room"],
                                        rule=lambda state: state.has(pin, player))

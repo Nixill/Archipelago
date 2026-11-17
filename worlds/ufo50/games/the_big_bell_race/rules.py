@@ -77,8 +77,10 @@ def max_score_in_logic(state: CollectionState, world: "UFO50World") -> int:
 
     return score_per_race * races
 
-def is_win_in_logic(state: CollectionState, world: "UFO50World") -> bool:
-    if not world.options.bbr_win_logic_requires_powerups.value:
+def is_cherry_in_logic(state: CollectionState, world: "UFO50World") -> bool:
+    if race_count(state, world) < 8:
+        return False
+    if world.options.bbr_cherry_availability.value == world.options.bbr_cherry_availability.option_always_available:
         return True
     if powerup_count(state, world) >= 5:
         return True
@@ -98,21 +100,22 @@ def create_rules(world: "UFO50World", regions: dict[str, Region]) -> None:
                                 # rule=lambda state: is_race_in_logic(i, state, world))
 
     if world.options.bbr_racer_checks.value:
+        regions["Menu"].connect(regions["Racers"])
         for racer in racers:
             set_rule(world.get_location(f"The Big Bell Race - Win with {racer}"),
                      rule=RacerInLogicRule(racer, world))
 
+    regions["Menu"].connect(regions["Scores"])
     for i in range(1, 72):
         if str(i) in world.options.bbr_score_checks:
             set_rule(world.get_location(f"The Big Bell Race - Score {i}"),
                      rule=ScoreInLogicRule(i, world))
 
-    set_rule(world.get_location("The Big Bell Race - Garden"),
-             rule=lambda state: is_win_in_logic(state, world))
+    # Garden is sphere 1
 
     set_rule(world.get_location("The Big Bell Race - Gold"),
              rule=lambda state: is_gold_in_logic(state, world))
 
     if "The Big Bell Race" in world.options.cherry_allowed_games:
         set_rule(world.get_location("The Big Bell Race - Cherry"),
-                 rule=lambda state: is_win_in_logic(state, world) and race_count(state, world) == 8)
+                 rule=lambda state: is_cherry_in_logic(state, world))

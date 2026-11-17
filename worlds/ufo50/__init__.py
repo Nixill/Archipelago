@@ -169,6 +169,21 @@ class UFO50World(World):
                 self.options.goal_game_amount.value = 50
                 # UT doesn't show locations that aren't actually in your slot, so this is fine
                 self.options.cherry_allowed_games.value = {game_name for game_name in game_ids.keys()}
+                self.options.golfaria_start_brakes.value = self.ut_passthrough[options.GolfariaStartWithBrakes.internal_name]
+                self.options.golfaria_difficulty.value = self.ut_passthrough[options.GolfariaDifficulty.internal_name]
+                self.options.golfaria_handicap.value = self.ut_passthrough[options.GolfariaHandicap.internal_name]
+                self.options.golfaria_hardcore_strokes.value = self.ut_passthrough[options.GolfariaHardcoreStrokes.internal_name]
+                self.options.bbr_race_progression.value = self.ut_passthrough[options.BBRRaceProgression.internal_name]
+                self.options.bbr_race_randomization.value = self.ut_passthrough[options.BBRRaceRandomization.internal_name]
+                self.options.bbr_racer_checks.value = self.ut_passthrough[options.BBRRacerChecks.internal_name]
+                self.options.bbr_score_checks.value = self.ut_passthrough[options.BBRScoreChecks.internal_name]
+                self.options.bbr_logical_points_per_race.value = self.ut_passthrough[options.BBRLogicalPointsPerRace.internal_name]
+                self.options.bbr_spawn_locked_powerups.value = self.ut_passthrough[options.BBRSpawnLockedPowerups.internal_name]
+                self.options.bbr_gold_availability.value = self.ut_passthrough[options.BBRGoldAvailability.internal_name]
+                self.options.bbr_gold_logic.value = self.ut_passthrough[options.BBRGoldLogicRaces.internal_name]
+                self.options.bbr_cherry_availability.value = self.ut_passthrough[options.BBRCherryAvailability.internal_name]
+                self.options.bbr_traps_enabled.value = self.ut_passthrough[options.BBRTrapsEnabled.internal_name]
+                self.options.bbr_death_link.value = self.ut_passthrough[options.BBRDeathLink.internal_name]
                 self.options.porgy_fuel_difficulty.value = self.ut_passthrough[options.PorgyFuelDifficulty.internal_name]
                 self.options.porgy_check_on_touch.value = self.ut_passthrough[options.PorgyCheckOnTouch.internal_name]
                 self.options.porgy_radar.value = self.ut_passthrough[options.PorgyRadar.internal_name]
@@ -179,10 +194,6 @@ class UFO50World(World):
                 self.options.divers_xp_item.value = self.ut_passthrough[options.DiversXpItem.internal_name]
                 self.options.divers_cash_item.value = self.ut_passthrough[options.DiversCashItem.internal_name]
                 self.options.grimstone_shops.value = self.ut_passthrough[options.GrimstoneShops.internal_name]
-                self.options.golfaria_start_brakes.value = self.ut_passthrough[options.GolfariaStartWithBrakes.internal_name]
-                self.options.golfaria_difficulty.value = self.ut_passthrough[options.GolfariaDifficulty.internal_name]
-                self.options.golfaria_handicap.value = self.ut_passthrough[options.GolfariaHandicap.internal_name]
-                self.options.golfaria_hardcore_strokes.value = self.ut_passthrough[options.GolfariaHardcoreStrokes.internal_name]
 
         included_game_names = sorted(self.options.always_on_games.value)
         # exclude always on games from random choice games
@@ -356,6 +367,21 @@ class UFO50World(World):
             options.PorgyCheckOnTouch.internal_name: self.options.porgy_check_on_touch.value,
             options.PorgyRadar.internal_name: self.options.porgy_radar.value,
             options.PorgyLanternless.internal_name: self.options.porgy_lanternless.value,
+            options.GolfariaStartWithBrakes.internal_name: self.options.golfaria_start_brakes.value,
+            options.GolfariaDifficulty.internal_name: self.options.golfaria_difficulty.value,
+            options.GolfariaHandicap.internal_name: self.options.golfaria_handicap.value,
+            options.GolfariaHardcoreStrokes.internal_name: self.options.golfaria_hardcore_strokes.value,
+            options.BBRRaceProgression.internal_name: self.options.bbr_race_progression.value,
+            options.BBRRaceRandomization.internal_name: self.options.bbr_race_randomization.value,
+            options.BBRRacerChecks.internal_name: self.options.bbr_racer_checks.value,
+            options.BBRScoreChecks.internal_name: self.options.bbr_score_checks.value,
+            options.BBRLogicalPointsPerRace.internal_name: self.options.bbr_logical_points_per_race.value,
+            options.BBRSpawnLockedPowerups.internal_name: self.options.bbr_spawn_locked_powerups.value,
+            options.BBRGoldAvailability.internal_name: self.options.bbr_gold_availability.value,
+            options.BBRGoldLogicRaces.internal_name: self.options.bbr_gold_logic.value,
+            options.BBRCherryAvailability.internal_name: self.options.bbr_cherry_availability.value,
+            options.BBRTrapsEnabled.internal_name: self.options.bbr_traps_enabled.value,
+            options.BBRDeathLink.internal_name: self.options.bbr_death_link.value,
             options.DiversStartWithFlippers.internal_name: self.options.divers_start_flippers.value,
             options.DiversRelicMult.internal_name: self.options.divers_relic_mult.value,
             options.DiversStoreDepth.internal_name: self.options.divers_store_depth.value,
@@ -369,10 +395,6 @@ class UFO50World(World):
             options.GrimstoneShops.internal_name: self.options.grimstone_shops.value,
             options.GrimstoneRandomCharacters.internal_name: self.options.grimstone_random_characters.value,
             options.GrimstoneDuplicateCharacters.internal_name: self.options.grimstone_duplicate_characters.value,
-            options.GolfariaStartWithBrakes.internal_name: self.options.golfaria_start_brakes.value,
-            options.GolfariaDifficulty.internal_name: self.options.golfaria_difficulty.value,
-            options.GolfariaHandicap.internal_name: self.options.golfaria_handicap.value,
-            options.GolfariaHardcoreStrokes.internal_name: self.options.golfaria_hardcore_strokes.value,
         }
         return slot_data
 

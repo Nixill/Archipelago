@@ -21,7 +21,7 @@ class AlwaysOnGames(OptionSet):
     display_name = "Always On Games"
     valid_keys = {game_name for game_name in game_ids.keys() if game_name != "Main Menu"}
     # default is here so the unit tests don't fail
-    default = ["Barbuta"]
+    default = ["The Big Bell Race"]
 
 
 class RandomChoiceGames(OptionSet):
@@ -99,7 +99,7 @@ class CherryAllowed(OptionSet):
     display_name = "Cherry-Allowed Games"
     valid_keys = {game_name for game_name in game_ids.keys() if game_name != "Main Menu"}
     # include the games where it makes sense to be Cherry by default
-    default = {"Barbuta", "Night Manor"}
+    default = {"Barbuta", "The Big Bell Race", "Night Manor"}
 
 
 # The Big Bell Race
@@ -108,8 +108,6 @@ class BBRRaceProgression(Choice):
     Determines how races are unlocked.
 
     - Randomized: Each specific racetrack is an item in the multiworld.
-    - Fixed Random: The multiworld contains eight "Progressive Racetrack" items. The order they
-      unlock tracks is randomly determined for the seed.
     - Fixed Vanilla: The multiworld contains eight "Progressive Racetrack" items. The order they
       unlock tracks is vanilla.
 
@@ -118,7 +116,7 @@ class BBRRaceProgression(Choice):
     internal_name = "bbr_race_progression"
     display_name = "The Big Bell Race - Race Progression"
     default = option_randomized = 0
-    option_fixed = 1
+    option_fixed_vanilla = 2
 
 class BBRRaceRandomization(Choice):
     """
@@ -128,6 +126,7 @@ class BBRRaceRandomization(Choice):
     - Seed Random: The order of tracks is randomized and predetermined at the start of the
       multiworld. Not necessarily the same order as unlocks in Fixed Random mode.
     - Order Received: The order of tracks is the order they are received in the multiworld.
+    - Vanilla: Tracks are 
     """
     internal_name = "bbr_race_randomization"
     display_name = "The Big Bell Race - Race Randomization"
@@ -187,7 +186,7 @@ class BBRGoldAvailability(Range):
     display_name = "The Big Bell Race - Gold Disk Availability"
     range_start = 5
     range_end = 8
-    default = 5
+    default = 7
 
 class BBRGoldLogicRaces(Range):
     """
@@ -200,16 +199,23 @@ class BBRGoldLogicRaces(Range):
     internal_name = "bbr_gold_logic"
     display_name = "The Big Bell Race - Gold Disk Logic"
     range_start = 5
-    range_end = 8
-    default = 7
+    default = range_end = 8
 
-class BBRWinLogicRequiresPowerups(DefaultOnToggle):
+class BBRCherryAvailability(Choice):
     """
-    If this is enabled, Gift and Cherry require all power-ups to be received before they are in
-    logic. Regardless of this option, Cherry also requires all tracks to be unlocked.
+    How should Cherry Disk be regarded as available?
+    - **require_powerups**: Cherry requires all five power-ups received before it can be obtained.
+    - **logic_powerups**: Cherry can be obtained without all five power-ups, but is not in logic
+      until those power-ups are received.
+    - **no_powerups**: Cherry can be obtained, and is in logic, without all power-ups received.
+
+    Regardless of the value of this option, Cherry is unobtainable until all racetracks are received.
     """
-    internal_name = "bbr_win_logic_requires_powerups"
-    display_name = "The Big Bell Race - Win Logic Requires Power-Ups"
+    internal_name = "bbr_cherry_availability"
+    display_name = "The Big Bell Race - Cherry Availability"
+    option_require_powerups = 0
+    default = option_logic_powerups = 1
+    option_no_powerups = 2
 
 class BBRTrapsEnabled(DefaultOnToggle):
     """
@@ -521,7 +527,7 @@ class UFO50Options(PerGameCommonOptions):
     bbr_spawn_locked_powerups: BBRSpawnLockedPowerups
     bbr_gold_availability: BBRGoldAvailability
     bbr_gold_logic: BBRGoldLogicRaces
-    bbr_win_logic_requires_powerups: BBRWinLogicRequiresPowerups
+    bbr_cherry_availability: BBRCherryAvailability
     bbr_traps_enabled: BBRTrapsEnabled
     bbr_death_link: BBRDeathLink
 
@@ -574,7 +580,7 @@ ufo50_option_groups = [
         BBRSpawnLockedPowerups, 
         BBRGoldAvailability, 
         BBRGoldLogicRaces, 
-        BBRWinLogicRequiresPowerups, 
+        BBRCherryAvailability, 
         BBRTrapsEnabled, 
         BBRDeathLink, 
     ]),

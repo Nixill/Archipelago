@@ -141,8 +141,8 @@ def get_item_groups() -> dict[str, set[str]]:
             "Divers - Mist Orb",
             "Divers - Flippers",
             "Divers - Godblood",
-            "Divers - Shallows Gate",
-            "Divers - Ruins Gate",
+            "Divers - Slime Cave Gate",
+            "Divers - Ruins North Gate",
             "Divers - Boss Gate 1",
             "Divers - Boss Gate 2"},
         "Divers - Bonus": {
@@ -156,8 +156,8 @@ def get_item_groups() -> dict[str, set[str]]:
             "Divers - Scale",
             "Divers - Cross",
             "Divers - 500 Cash",
-            "Divers - A Relic",
-            "Divers - B Relic"},
+            "Divers - A relic",
+            "Divers - B relic"},
     })
     return item_groups
 

@@ -72,7 +72,7 @@ def get_items() -> dict[str, int]:
 # this should return the item groups for this game, independent of yaml options
 def get_item_groups() -> dict[str, set[str]]:
     return {
-        "The Big Bell Race": set(flat_item_table.keys()),
+        "The Big Bell Race": set(f"The Big Bell Race - {name}" for name in flat_item_table.keys()),
         **{
             f"The Big Bell Race - {category}": {
                 f"The Big Bell Race - {name}" for name in items.keys()
@@ -149,5 +149,5 @@ def get_filler_item_name(world: "UFO50World") -> str:
     bbr_name = "The Big Bell Race - "
     bbr_fillers = [n
                    for n, v in item_table["Fillers"].items()
-                     if v.classification & (IC.trap == 0) or world.options.bbr_traps_enabled.value]
+                     if (v.classification & IC.trap) == 0 or world.options.bbr_traps_enabled.value]
     return bbr_name + world.random.choice(bbr_fillers)

@@ -34,7 +34,7 @@ def get_locations() -> dict[str, int]:
 
 def get_location_groups() -> dict[str, set[str]]:
     return {
-        "The Big Bell Race": set(location_table.keys()),
+        "The Big Bell Race": set(f"The Big Bell Race - {name}" for name in location_table.keys()),
         "The Big Bell Race - Race Wins": {
             f"The Big Bell Race - Race 0{i} - Win"
             for i in range(1, 9)
@@ -62,10 +62,11 @@ def get_location_groups() -> dict[str, set[str]]:
 
 def create_locations(world: "UFO50World", regions: dict[str, Region]) -> None:
     for loc_name, loc_data in location_table.items():
-        if loc_name in racers and not world.options.bbr_racer_checks.value:
+        if loc_name.removeprefix("Win with ") in racers and not world.options.bbr_racer_checks.value:
             continue
 
-        if loc_name.startswith("Score ") and loc_name.removeprefix("Score ") not in world.options.bbr_score_checks:
+        if loc_name.startswith("Score ") and loc_name.removeprefix("Score ") not in world.options.bbr_score_checks\
+            and 'all' not in world.options.bbr_score_checks:
             continue
 
         if loc_name == "Cherry" and "The Big Bell Race" not in world.options.cherry_allowed_games:
