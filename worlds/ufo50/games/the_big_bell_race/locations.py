@@ -16,8 +16,8 @@ class LocationInfo(NamedTuple):
     region_name: str
 
 location_table = dict[str, LocationInfo]([
-    *((f"Race 0{i} - Win", LocationInfo(i * 10, f"Race 0{i}")) for i in range(1, 9)),
-    *((f"Race 0{i} - Collect Item", LocationInfo(i * 10 + 1, f"Race 0{i}")) for i in range(1, 9)),
+    *((f"Race 0{i} - Win", LocationInfo(i, f"Race 0{i}")) for i in range(1, 9)),
+    *((f"Race 0{i} - Collect Item", LocationInfo(10 + i, f"Race 0{i}")) for i in range(1, 9)),
     *((f"Win with {name}", LocationInfo(100 + i, "Racers")) for i, name in enumerate(racers)),
     *((f"Score {i}", LocationInfo(200 + i, "Scores")) for i in range(1, 72)),
 
